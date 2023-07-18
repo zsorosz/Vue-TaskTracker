@@ -1,9 +1,11 @@
 <script setup>
 import { RouterView } from 'vue-router'
+import TaskHeader from './components/TaskHeader.vue';
 
 </script>
 
 <template>
+  <TaskHeader />
   <RouterView />
 </template>
 
