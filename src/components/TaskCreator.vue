@@ -1,20 +1,32 @@
 <script setup>
-import { ref } from "vue";
+import { reactive } from "vue";
 
-const emit = defineEmits(["create-task"])
+const emit = defineEmits(["create-task"]);
 
-const task = ref("Task");
+const taskState = reactive({
+  task: "",
+  invalid: null,
+  errMsg: "",
+});
 
 const createTask = () => {
-    emit("create-task", task.value)
-}
+    taskState.invalid = null
+  if (taskState.task !== "") {
+    emit("create-task", taskState.task);
+    taskState.task = "";
+    return;
+  }
+  taskState.invalid = true;
+  taskState.errMsg = "Task value cannot be empty"
+};
 </script>
 
 <template>
-  <div class="input-wrap">
-    <input type="text" v-model="task" />
+  <div class="input-wrap" :class="{ 'input-err': taskState.invalid}">
+    <input type="text" v-model="taskState.task" />
     <button @click="createTask()">Create</button>
   </div>
+  <p v-show="taskState.invalid" class="err-msg">{{ taskState.errMsg }}</p>
 </template>
 
 <style lang="scss" scoped>
@@ -22,6 +34,10 @@ const createTask = () => {
   display: flex;
   transition: 250ms ease;
   border: 2px solid #41b080;
+
+  &.input-err {
+    border-color: red;
+  }
 
   &:focus-within {
     box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.1),
@@ -42,5 +58,12 @@ const createTask = () => {
     padding: 8px 16px;
     border: none;
   }
+}
+
+.err-msg {
+  margin-top: 6px;
+  font-size: 12px;
+  text-align: center;
+  color: red;
 }
 </style>

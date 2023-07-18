@@ -4,7 +4,7 @@
   import TaskCreator from '../components/TaskCreator.vue';
   const taskList = ref([]);
 
-  const createTaks = (task) => {
+  const createTask = (task) => {
     taskList.value.push({
       id: uid(),
       task,
@@ -17,7 +17,7 @@
 <template>
   <main>
     <h1>Create Task</h1>
-    <TaskCreator @create-task="createTaks()" />
+    <TaskCreator @create-task="createTask()" />
   </main>
 </template>
 
