@@ -1,5 +1,6 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, defineEmits } from "vue";
+import TaskButton from "./TaskButton.vue";
 
 const emit = defineEmits(["create-task"]);
 
@@ -24,7 +25,7 @@ const createTask = () => {
 <template>
   <div class="input-wrap" :class="{ 'input-err': taskState.invalid}">
     <input type="text" v-model="taskState.task" />
-    <button @click="createTask()">Create</button>
+    <TaskButton @click="createTask()">Create</TaskButton>
   </div>
   <p v-show="taskState.invalid" class="err-msg">{{ taskState.errMsg }}</p>
 </template>
@@ -52,11 +53,6 @@ const createTask = () => {
     &:focus {
       outline: none;
     }
-  }
-
-  button {
-    padding: 8px 16px;
-    border: none;
   }
 }
 
