@@ -8,18 +8,27 @@ const props = defineProps({
   },
   index: {
     type: Number,
-    required: true
-  }
+    required: true,
+  },
 });
-defineEmits(["toggle-complete", "edit-task", "update-task"])
+defineEmits(["toggle-complete", "edit-task", "update-task", "delete-task"]);
 </script>
 
 <template>
   <li>
-    <input type="checkbox" :checked="task.isCompleted" @input="$emit('toggle-complete', index)"/>
+    <input
+      type="checkbox"
+      :checked="task.isCompleted"
+      @input="$emit('toggle-complete', index)"
+    />
     <div class="task">
-      <input v-if="task.isEditing" type="text" :value="task.task" @input="$emit('update-task', $event.target.value, index)" />
-      <span v-else :class="{'completed-task' : task.isCompleted}">
+      <input
+        v-if="task.isEditing"
+        type="text"
+        :value="task.task"
+        @input="$emit('update-task', $event.target.value, index)"
+      />
+      <span v-else :class="{ 'completed-task': task.isCompleted }">
         {{ task.task }}
       </span>
     </div>
@@ -40,7 +49,13 @@ defineEmits(["toggle-complete", "edit-task", "update-task"])
         width="22"
         @click="$emit('edit-task', index)"
       />
-      <Icon icon="ph:trash" class="icon trash-icon" color="f95e5e" width="22" />
+      <Icon
+        icon="ph:trash"
+        class="icon trash-icon"
+        color="f95e5e"
+        width="22"
+        @click="$emit('delete-task', task.id)"
+      />
     </div>
   </li>
 </template>
@@ -76,9 +91,9 @@ li {
 
   .task {
     flex: 1;
-    
+
     .completed-task {
-        text-decoration: line-through;
+      text-decoration: line-through;
     }
 
     input[type="text"] {

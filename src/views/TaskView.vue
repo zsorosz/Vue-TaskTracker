@@ -23,6 +23,9 @@ const toggleEditTask = (taskPos) => {
 const updateTask = (taskVal, taskPos) => {
   taskList.value[taskPos].task = taskVal
 }
+const deleteTask = (taskId) => {
+  taskList.value = taskList.value.filter((task) => task.id !== taskId)
+}
 </script>
 
 <template>
@@ -38,6 +41,7 @@ const updateTask = (taskVal, taskPos) => {
         @toggle-complete="toggleTaskComplete"
         @edit-task="toggleEditTask"
         @update-task="updateTask"
+        @delete-task="deleteTask"
       />
     </ul>
     <p v-else class="task-msg">
