@@ -6,6 +6,19 @@ import TaskCreator from "../components/TaskCreator.vue";
 import TaskItem from "../components/TaskItem.vue";
 const taskList = ref([]);
 
+const fetchTaskList = () => {
+  const savedTaskList = JSON.parse(localStorage.getItem("taskList"));
+  if (savedTaskList) {
+    taskList.value = savedTaskList;
+  }
+};
+
+fetchTaskList();
+
+const setTaskListToLocalStorage = () => {
+  localStorage.setItem("taskList", JSON.stringify(taskList.value));
+};
+
 const createTask = (task) => {
   taskList.value.push({
     id: uid(),
@@ -13,19 +26,24 @@ const createTask = (task) => {
     isCompleted: null,
     isEditing: null,
   });
+  setTaskListToLocalStorage();
 };
 const toggleTaskComplete = (taskPos) => {
-  taskList.value[taskPos].isCompleted = !taskList.value[taskPos].isCompleted
-}
+  taskList.value[taskPos].isCompleted = !taskList.value[taskPos].isCompleted;
+  setTaskListToLocalStorage();
+};
 const toggleEditTask = (taskPos) => {
-  taskList.value[taskPos].isEditing = !taskList.value[taskPos].isEditing
-}
+  taskList.value[taskPos].isEditing = !taskList.value[taskPos].isEditing;
+  setTaskListToLocalStorage();
+};
 const updateTask = (taskVal, taskPos) => {
-  taskList.value[taskPos].task = taskVal
-}
+  taskList.value[taskPos].task = taskVal;
+  setTaskListToLocalStorage();
+};
 const deleteTask = (taskId) => {
-  taskList.value = taskList.value.filter((task) => task.id !== taskId)
-}
+  taskList.value = taskList.value.filter((task) => task.id !== taskId);
+  setTaskListToLocalStorage();
+};
 </script>
 
 <template>
