@@ -14,6 +14,9 @@ const createTask = (task) => {
     isEditing: null,
   });
 };
+const toggleTaskComplete = (taskPos) => {
+  taskList.value[taskPos].isCompleted = !taskList.value[taskPos].isCompleted
+}
 </script>
 
 <template>
@@ -21,7 +24,13 @@ const createTask = (task) => {
     <h1>Create Task</h1>
     <TaskCreator @create-task="createTask" />
     <ul class="task-list" v-if="taskList.length > 0">
-      <TaskItem v-for="task in taskList" :task="task" v-bind:key="task.id" />
+      <TaskItem
+        v-for="(task, index) in taskList"
+        :task="task"
+        :index="index"
+        v-bind:key="task.id"
+        @toggle-complete="toggleTaskComplete"
+      />
     </ul>
     <p v-else class="task-msg">
       <Icon icon="noto-v1:sad-but-relieved-face" />
