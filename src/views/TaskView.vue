@@ -1,10 +1,20 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch, computed } from "vue";
 import { uid } from "uid";
 import { Icon } from "@iconify/vue";
 import TaskCreator from "../components/TaskCreator.vue";
 import TaskItem from "../components/TaskItem.vue";
 const taskList = ref([]);
+
+watch(taskList, () => {
+  setTaskListToLocalStorage()
+}, {
+  deep: true
+})
+
+const allTasksCompleted = computed(() => {
+  return taskList.value.every((task) => task.isCompleted)
+})
 
 const fetchTaskList = () => {
   const savedTaskList = JSON.parse(localStorage.getItem("taskList"));
@@ -26,23 +36,18 @@ const createTask = (task) => {
     isCompleted: null,
     isEditing: null,
   });
-  setTaskListToLocalStorage();
 };
 const toggleTaskComplete = (taskPos) => {
   taskList.value[taskPos].isCompleted = !taskList.value[taskPos].isCompleted;
-  setTaskListToLocalStorage();
 };
 const toggleEditTask = (taskPos) => {
   taskList.value[taskPos].isEditing = !taskList.value[taskPos].isEditing;
-  setTaskListToLocalStorage();
 };
 const updateTask = (taskVal, taskPos) => {
   taskList.value[taskPos].task = taskVal;
-  setTaskListToLocalStorage();
 };
 const deleteTask = (taskId) => {
   taskList.value = taskList.value.filter((task) => task.id !== taskId);
-  setTaskListToLocalStorage();
 };
 </script>
 
@@ -66,6 +71,9 @@ const deleteTask = (taskId) => {
       <Icon icon="noto-v1:sad-but-relieved-face" />
       <span>You have no tasks to complete! Add one!</span>
     </p>
+    <p v-if="allTasksCompleted && taskList.length" class="completed-msg">
+      <Icon icon="noto-v1:party-popper" />
+      <span>You have completed all your tasks!</span></p>
   </main>
 </template>
 
@@ -83,7 +91,7 @@ main {
     text-align: center;
   }
 
-  .todo-list {
+  .task-list {
     display: flex;
     flex-direction: column;
     list-style: none;
@@ -91,7 +99,7 @@ main {
     gap: 20px;
   }
 
-  .task-msg {
+  .completed-msg {
     display: flex;
     align-items: center;
     justify-content: center;
