@@ -17,6 +17,12 @@ const createTask = (task) => {
 const toggleTaskComplete = (taskPos) => {
   taskList.value[taskPos].isCompleted = !taskList.value[taskPos].isCompleted
 }
+const toggleEditTask = (taskPos) => {
+  taskList.value[taskPos].isEditing = !taskList.value[taskPos].isEditing
+}
+const updateTask = (taskVal, taskPos) => {
+  taskList.value[taskPos].task = taskVal
+}
 </script>
 
 <template>
@@ -30,6 +36,8 @@ const toggleTaskComplete = (taskPos) => {
         :index="index"
         v-bind:key="task.id"
         @toggle-complete="toggleTaskComplete"
+        @edit-task="toggleEditTask"
+        @update-task="updateTask"
       />
     </ul>
     <p v-else class="task-msg">
